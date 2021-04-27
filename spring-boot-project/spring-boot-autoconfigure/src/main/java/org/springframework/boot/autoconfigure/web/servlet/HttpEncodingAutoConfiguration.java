@@ -40,9 +40,36 @@ import org.springframework.web.filter.CharacterEncodingFilter;
  * @author Brian Clozel
  * @since 2.0.0
  */
+
+/**
+ * proxyBeanMethods = true 或不写，是Full模式
+ * proxyBeanMethods = false 是lite模式
+ * 不带@Configuration的类叫Lite配置类
+ *
+ * Full模式下通过方法调用指向的仍旧是原来的Bean
+ * 利用cglib代理增强，bean是单例的，@Bean方法调用生成实例时，如果已经存在这个bean,直接返回
+ *
+ * lite模式下，直接返回新实例对象。
+ * Spring 5.2.0+的版本，建议你的配置类均采用Lite模式去做，即显示设置proxyBeanMethods = false。Spring Boot在2.2.0版本（依赖于Spring 5.2.0）起就把它的所有的自动配置类的此属性改为了false，即@Configuration(proxyBeanMethods = false)，提高Spring启动速度
+ *
+ * Full(proxyBeanMethods = true) 【保证每个@Bean方法被调用多少次返回的组件都是单实例的】
+ * Lite(proxyBeanMethods = false)【每个@Bean方法被调用多少次返回的组件都是新创建的】
+ * 组件依赖必须使用Full模式默认。其他默认是否Lite模式
+ */
 @Configuration(proxyBeanMethods = false)
+/**
+ * 启动指定类的ConfigurationProperties功能；
+ * 将配置文件中对应的值和HttpEncodingProperties绑定起来；
+ * 并把HttpEncodingProperties加入到ioc容器中（HttpEncodingProperties类有被@ConfigurationProperties 注解）
+ */
 @EnableConfigurationProperties(HttpProperties.class)
+/**
+ * 判断当前应用是否是web应用，如果是，当前配置类生效
+ */
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
+/**
+ * 判断当前项目有没有这个（CharacterEncodingFilter；SpringMVC中进行乱码解决的过滤器）
+ */
 @ConditionalOnClass(CharacterEncodingFilter.class)
 @ConditionalOnProperty(prefix = "spring.http.encoding", value = "enabled", matchIfMissing = true)
 public class HttpEncodingAutoConfiguration {

@@ -33,6 +33,11 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties
+/**
+ * @ConfigurationProperties注解可以生效是因为在SpringBoot中有一个类叫ConfigurationPropertiesAutoConfiguration，
+ * 它为@ConfigurationProperties注解的解析提供了支持的工作，
+ * 这种说法更准确一点的说法是在这个类上还存在了@Configuration和@EnableConfigurationProperties这两个注解
+ */
 public class ConfigurationPropertiesAutoConfiguration {
 
 }

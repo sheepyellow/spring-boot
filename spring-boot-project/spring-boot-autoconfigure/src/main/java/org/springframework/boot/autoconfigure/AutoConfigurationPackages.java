@@ -120,6 +120,7 @@ public abstract class AutoConfigurationPackages {
 
 		@Override
 		public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionRegistry registry) {
+			//返回主配置类所在的包路径，然后通过register()方法，将该包下的所有配置信息，都加在到spring容器中
 			register(registry, new PackageImport(metadata).getPackageName());
 		}
 

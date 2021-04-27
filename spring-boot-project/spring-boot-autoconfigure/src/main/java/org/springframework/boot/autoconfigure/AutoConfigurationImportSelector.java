@@ -113,6 +113,11 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 			return EMPTY_ENTRY;
 		}
 		AnnotationAttributes attributes = getAttributes(annotationMetadata);
+		//获取所有配置信息
+		//分析getCandidateConfigurations方法,层层分析到loadSpringFactories()方法，最终发现
+		//它会加载"META-INF/spring.factories"路径下的所有配置信息
+		//getCandidateConfigurations,翻译为：获取候选人配置信息
+		//configurations中的具体内容，如下图所示：
 		List<String> configurations = getCandidateConfigurations(annotationMetadata, attributes);
 		configurations = removeDuplicates(configurations);
 		Set<String> exclusions = getExclusions(annotationMetadata, attributes);
@@ -168,6 +173,9 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 	 * @return a list of candidate configurations
 	 */
 	protected List<String> getCandidateConfigurations(AnnotationMetadata metadata, AnnotationAttributes attributes) {
+		//扫描所有位于META-INF/spring.factories文件下的jar包。在 META-INF 路径下，我们一共看到了两个spring.factories 文件
+		//一个是spring-boot-xxx.RELEASE.jar
+		//另一个spring-boot-autoconfigure-x.x.x.RELEASE.jar
 		List<String> configurations = SpringFactoriesLoader.loadFactoryNames(getSpringFactoriesLoaderFactoryClass(),
 				getBeanClassLoader());
 		Assert.notEmpty(configurations, "No auto configuration classes found in META-INF/spring.factories. If you "
